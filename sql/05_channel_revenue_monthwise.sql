@@ -12,3 +12,5 @@ from
 rank() over(partition by channel order by total_revenue desc) as rnk
 from monthly_rev)A
 where rnk =1
+--All channels — Retail, E-commerce, and Discount — reached their maximum monthly revenue in July 2023. 
+              
