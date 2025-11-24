@@ -19,5 +19,27 @@ delivery_days – Days taken to deliver
 delivered_qty – Delivered quantity
 units_sold – Units sold
 
+Problem Statement:
+01_Year-over-year sales comparison
+02_Delivery performance
+03_Monthly revenue trends
+04_Region–category contribution(%)
+05_Channel growth analysis
+
+
+**Sample output**
+05_Peak performing month(channel wise)
+
+| Channel    | Year | Month | Total Revenue | Rank |
+| ---------- | ---- | ----- | ------------- | ---- |
+| Discount   | 2023 | 7     | 298401.57     | 1    |
+| E-commerce | 2023 | 7     | 296081.11     | 1    |
+| Retail     | 2023 | 7     | 297239.50     | 1    |
+
+Insight: All channels — Retail, E-commerce, and Discount —
+reached their maximum monthly revenue in July 2023,
+indicating a strong seasonal peak across the FMCG market.
+
+
 
 Source: Dataset sourced from Kaggle.
