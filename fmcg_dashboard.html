@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMCG Sales Analysis Dashboard (2022-2024)</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #0f1419; color: #e8e8e8; }
+        .header { background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 30px; text-align: center; border-bottom: 3px solid #0ea5e9; }
+        .header h1 { font-size: 2rem; color: #0ea5e9; }
+        .header p { color: #94a3b8; margin-top: 8px; }
+        .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 25px 40px; }
+        .kpi-card { background: #1e293b; border-radius: 12px; padding: 20px; text-align: center; border: 1px solid #334155; }
+        .kpi-card h3 { color: #94a3b8; font-size: 0.85rem; text-transform: uppercase; }
+        .kpi-card .value { font-size: 1.8rem; font-weight: bold; color: #0ea5e9; margin-top: 8px; }
+        .kpi-card .sub { font-size: 0.8rem; color: #22c55e; margin-top: 4px; }
+        .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px 40px; }
+        .chart-box { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; }
+        .chart-box.full { grid-column: 1 / -1; }
+        .chart-box h3 { color: #e2e8f0; margin-bottom: 10px; font-size: 1rem; }
+        .insight { background: #1e3a5f; border-left: 4px solid #0ea5e9; padding: 12px 16px; margin-top: 10px; border-radius: 4px; font-size: 0.85rem; color: #cbd5e1; }
+        .footer { text-align: center; padding: 20px; color: #64748b; font-size: 0.8rem; border-top: 1px solid #334155; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 FMCG Sales Analysis Dashboard</h1>
+        <p>Comprehensive analysis of Fast-Moving Consumer Goods transactions (2022–2024) | 190K+ records</p>
+    </div>
+
+    <div class="kpi-row">
+        <div class="kpi-card">
+            <h3>Total Revenue</h3>
+            <div class="value">₹19,951,301</div>
+            <div class="sub">3 Years Combined</div>
+        </div>
+        <div class="kpi-card">
+            <h3>Total Units Sold</h3>
+            <div class="value">3,799,824</div>
+            <div class="sub">Across all channels</div>
+        </div>
+        <div class="kpi-card">
+            <h3>YoY Growth (2023)</h3>
+            <div class="value">+166.4%</div>
+            <div class="sub">vs 2022</div>
+        </div>
+        <div class="kpi-card">
+            <h3>YoY Growth (2024)</h3>
+            <div class="value">-1.0%</div>
+            <div class="sub">vs 2023</div>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-box full">
+            <h3>📈 Monthly Revenue Trends (2022–2024)</h3>
+            <div id="chart-monthly"></div>
+            <div class="insight">💡 Insight: Revenue shows consistent seasonal patterns with peaks in mid-year (June-July) across all years.</div>
+        </div>
+
+        <div class="chart-box">
+            <h3>📊 Year-over-Year Revenue</h3>
+            <div id="chart-yoy"></div>
+        </div>
+
+        <div class="chart-box">
+            <h3>🛒 Channel Performance by Year</h3>
+            <div id="chart-channel"></div>
+        </div>
+
+        <div class="chart-box">
+            <h3>🌍 Region-Category Contribution (2024)</h3>
+            <div id="chart-region"></div>
+        </div>
+
+        <div class="chart-box">
+            <h3>🚚 Avg Delivery Days by Region</h3>
+            <div id="chart-delivery"></div>
+        </div>
+
+        <div class="chart-box full">
+            <h3>🎯 Promotion Impact on Revenue</h3>
+            <div id="chart-promo"></div>
+            <div class="insight">💡 Insight: Promotions drive significant revenue uplift — a key lever for sales strategy optimization.</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Built by Swetha | Data Source: FMCG Transactional Dataset (Kaggle) | Tools: Python, SQL, Plotly</p>
+    </div>
+
+    <script>
+        const darkLayout = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: '#e2e8f0' },
+            margin: { t: 30, b: 40, l: 50, r: 20 },
+            xaxis: { gridcolor: '#334155' },
+            yaxis: { gridcolor: '#334155' }
+        };
+
+        // Monthly Revenue Trends
+        const monthlyData = [{"year": 2022, "traces": [[1.0, 10719.36], [2.0, 29181.55], [3.0, 86890.92], [4.0, 178015.88], [5.0, 273859.61], [6.0, 332079.35], [7.0, 379645.34], [8.0, 367004.5], [9.0, 341473.15], [10.0, 356889.53], [11.0, 376476.67], [12.0, 434725.65]]}, {"year": 2023, "traces": [[1.0, 506891.58], [2.0, 556720.23], [3.0, 672868.76], [4.0, 740821.12], [5.0, 813925.27], [6.0, 853630.03], [7.0, 891713.45], [8.0, 801250.06], [9.0, 693681.02], [10.0, 670892.14], [11.0, 615084.54], [12.0, 618775.36]]}, {"year": 2024, "traces": [[1.0, 646163.89], [2.0, 654910.69], [3.0, 764841.08], [4.0, 756735.03], [5.0, 801771.83], [6.0, 767453.63], [7.0, 800958.64], [8.0, 717622.37], [9.0, 632673.37], [10.0, 621965.83], [11.0, 580525.33], [12.0, 602463.82]]}];
+        const monthlyTraces = monthlyData.map(d => ({
+            x: d.traces.map(t => t[0]),
+            y: d.traces.map(t => t[1]),
+            name: String(d.year),
+            type: 'scatter',
+            mode: 'lines+markers'
+        }));
+        Plotly.newPlot('chart-monthly', monthlyTraces, {
+            ...darkLayout,
+            xaxis: { ...darkLayout.xaxis, title: 'Month', dtick: 1 },
+            yaxis: { ...darkLayout.yaxis, title: 'Revenue' },
+            height: 300
+        });
+
+        // YoY Revenue
+        Plotly.newPlot('chart-yoy', [{
+            x: [2022, 2023, 2024],
+            y: [3166961.51, 8436253.56, 8348085.51],
+            type: 'bar',
+            marker: { color: ['#0ea5e9', '#22c55e', '#f59e0b'] }
+        }], { ...darkLayout, height: 280 });
+
+        // Channel Performance
+        const channelData = [{"channel": "Discount", "years": [2022, 2023, 2024], "revenue": [1062638.92, 2807765.4, 2771868.79]}, {"channel": "E-commerce", "years": [2022, 2023, 2024], "revenue": [1042182.88, 2818210.92, 2793041.61]}, {"channel": "Retail", "years": [2022, 2023, 2024], "revenue": [1062139.71, 2810277.24, 2783175.11]}];
+        const channelTraces = channelData.map(d => ({
+            x: d.years,
+            y: d.revenue,
+            name: d.channel,
+            type: 'bar'
+        }));
+        Plotly.newPlot('chart-channel', channelTraces, {
+            ...darkLayout, barmode: 'group', height: 280
+        });
+
+        // Region-Category (top 10)
+        const regionData = [["PL-North", "Yogurt", 13.62105237946946], ["PL-South", "Yogurt", 13.55314327631989], ["PL-Central", "Yogurt", 13.361844804582027], ["PL-Central", "Milk", 6.699427423569839], ["PL-North", "SnackBar", 6.661906844794646], ["PL-North", "Milk", 6.628809915005291], ["PL-South", "Milk", 6.566391412059218], ["PL-South", "SnackBar", 6.489862847607558], ["PL-Central", "SnackBar", 6.4649343775109465], ["PL-North", "ReadyMeal", 5.71206607106256]];
+        Plotly.newPlot('chart-region', [{
+            x: regionData.map(r => r[0] + ' | ' + r[1]),
+            y: regionData.map(r => r[2]),
+            type: 'bar',
+            marker: { color: '#8b5cf6' }
+        }], { ...darkLayout, height: 280, xaxis: { ...darkLayout.xaxis, tickangle: -30 } });
+
+        // Delivery Days
+        const delData = [["PL-Central", 2.9999919270364663], ["PL-North", 3.005956422156514], ["PL-South", 3.0206751677473997]];
+        Plotly.newPlot('chart-delivery', [{
+            x: delData.map(d => d[0]),
+            y: delData.map(d => d[1]),
+            type: 'bar',
+            marker: { color: '#f97316' }
+        }], { ...darkLayout, height: 280 });
+
+        // Promotion Impact
+        Plotly.newPlot('chart-promo', [{
+            labels: ['No Promotion', 'With Promotion'],
+            values: [14849830.28, 5101470.3],
+            type: 'pie',
+            marker: { colors: ['#64748b', '#22c55e'] },
+            textinfo: 'label+percent'
+        }], { ...darkLayout, height: 280 });
+    </script>
+</body>
+</html>
